@@ -1,0 +1,96 @@
+[package]
+
+name = "clap_generate"
+version = "0.0.1"
+authors = ["Kevin K. <kbknapp@gmail.com>"]
+exclude = [
+	".github/*",
+	"examples/*",
+	"tests/*",
+	"benches/*",
+	"etc/*",
+	"*.png",
+	"*.dot",
+	"*.yml",
+	"*.toml",
+	"*.md",
+]
+include = [
+	"src/**/*",
+	"Cargo.toml",
+	"README.md"
+]
+repository = "https://github.com/clap-rs/clap_generate"
+documentation = "https://docs.rs/clap_generate/"
+homepage = "https://clap.rs/"
+readme = "README.md"
+license = "MIT/APACHE-2.0"
+keywords = [
+	"cli",
+	"parser",
+	"completion",
+	"manpage",
+	"generate"
+]
+categories = ["command-line-interface"]
+description = """
+A shell completion script and manpage generation library used with clap
+"""
+
+[badges]
+travis-ci = { repository = "clap-rs/clap_generate" }
+appveyor = { repository = "clap-rs/clap_generate" }
+coveralls = { repository = "clap-rs/clap_generate", branch = "master" }
+is-it-maintained-issue-resolution = { repository = "clap-rs/clap_generate" }
+is-it-maintained-open-issues = { repository = "clap-rs/clap_generate" }
+maintenance = {status = "actively-developed"}
+
+[dependencies]
+clippy    = { version = "~0.0.166", optional = true }
+
+[dev-dependencies]
+version-sync = "0.5"
+
+[features]
+default     = []
+unstable    = [] # for building with unstable clap features (doesn't require nightly Rust) (currently none)
+nightly     = [] # for building with unstable Rust features (currently none)
+lints       = ["clippy"] # Requires nightly Rust
+debug       = [] # Enables debug messages
+no_cargo    = [] # Enable if you're not using Cargo, disables Cargo-env-var-dependent macros
+doc         = [] # All the features which add to documentation
+
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+
+[profile.dev]
+opt-level = 0
+debug = true
+rpath = false
+lto = false
+debug-assertions = true
+codegen-units = 4
+
+[profile.test]
+opt-level = 1
+debug = true
+rpath = false
+lto = false
+debug-assertions = true
+codegen-units = 4
+
+[profile.bench]
+opt-level = 3
+debug = false
+rpath = false
+lto = true
+debug-assertions = false
+codegen-units = 1
+
+[package.metadata.docs.rs]
+features = ["doc"]
