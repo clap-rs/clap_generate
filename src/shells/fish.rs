@@ -2,7 +2,7 @@
 use std::io::Write;
 
 // Internal
-use build::App;
+use clap::App;
 
 pub struct FishGen<'a, 'b>(&'b App<'a, 'b>)
 where

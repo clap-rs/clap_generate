@@ -1,11 +1,13 @@
 // Std
-use std::io::Write;
 #[allow(unused_imports)]
 use std::ascii::AsciiExt;
+use std::io::Write;
+
+// Third Party
+use clap::{App, ArgSettings};
 
 // Internal
-use build::{App, ArgSettings};
-use completions;
+use shells;
 use INTERNAL_ERROR_MSG;
 
 pub struct ZshGen<'a, 'b>(&'b App<'a, 'b>)
@@ -86,9 +88,8 @@ _{name} \"$@\"",
 fn subcommand_details(p: &App) -> String {
     debugln!("ZshGen::subcommand_details;");
     // First we do ourself
-    let mut ret = vec![
-        format!(
-            "\
+    let mut ret = vec![format!(
+        "\
 (( $+functions[_{bin_name_underscore}_commands] )) ||
 _{bin_name_underscore}_commands() {{
     local commands; commands=(
@@ -96,14 +97,13 @@ _{bin_name_underscore}_commands() {{
     )
     _describe -t commands '{bin_name} commands' commands \"$@\"
 }}",
-            bin_name_underscore = p.bin_name.as_ref().unwrap().replace(" ", "__"),
-            bin_name = p.bin_name.as_ref().unwrap(),
-            subcommands_and_args = subcommands_of(p)
-        ),
-    ];
+        bin_name_underscore = p.bin_name.as_ref().unwrap().replace(" ", "__"),
+        bin_name = p.bin_name.as_ref().unwrap(),
+        subcommands_and_args = subcommands_of(p)
+    )];
 
     // Next we start looping through all the children, grandchildren, etc.
-    let mut all_subcommands = completions::all_subcommands(p);
+    let mut all_subcommands = shells::all_subcommands(p);
     all_subcommands.sort();
     all_subcommands.dedup();
     for &(_, ref bin_name) in &all_subcommands {
@@ -145,7 +145,8 @@ fn subcommands_of(p: &App) -> String {
         let s = format!(
             "\"{name}:{help}\" \\",
             name = n,
-            help = sc.about
+            help = sc
+                .about
                 .unwrap_or("")
                 .replace("[", "\\[")
                 .replace("]", "\\]")
@@ -209,7 +210,7 @@ fn get_subcommands_of(p: &App) -> String {
         return String::new();
     }
 
-    let sc_names = completions::subcommands_of(p);
+    let sc_names = shells::subcommands_of(p);
 
     let mut subcmds = vec![];
     for &(ref name, ref bin_name) in &sc_names {
@@ -458,20 +459,24 @@ fn write_positionals_of(p: &App) -> String {
                 ""
             },
             name = arg.name,
-            help = arg.help
+            help = arg
+                .help
                 .map_or("".to_owned(), |v| " -- ".to_owned() + v)
                 .replace("[", "\\[")
                 .replace("]", "\\]"),
-            action = arg.possible_vals
+            action = arg
+                .possible_vals
                 .as_ref()
-                .map_or("_files".to_owned(), |values| format!(
-                    "({})",
-                    values
-                        .iter()
-                        .map(|v| escape_value(*v))
-                        .collect::<Vec<String>>()
-                        .join(" ")
-                ))
+                .map_or("_files".to_owned(), |values| {
+                    format!(
+                        "({})",
+                        values
+                            .iter()
+                            .map(|v| escape_value(*v))
+                            .collect::<Vec<String>>()
+                            .join(" ")
+                    )
+                })
         );
 
         debugln!("write_positionals_of:iter: Wrote...{}", a);

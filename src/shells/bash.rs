@@ -2,8 +2,9 @@
 use std::io::Write;
 
 // Internal
-use build::{App, Arg};
-use completions;
+use clap::{App, Arg};
+
+use shells;
 
 pub struct BashGen<'a, 'b>(&'b App<'a, 'b>)
 where
@@ -70,7 +71,7 @@ complete -F _{name} -o bashdefault -o default {name}
     fn all_subcommands(&self) -> String {
         debugln!("BashGen::all_subcommands;");
         let mut subcmds = String::new();
-        let scs = completions::all_subcommand_names(self.0);
+        let scs = shells::all_subcommand_names(self.0);
 
         for sc in &scs {
             subcmds = format!(
@@ -90,7 +91,7 @@ complete -F _{name} -o bashdefault -o default {name}
     fn subcommand_details(&self) -> String {
         debugln!("BashGen::subcommand_details;");
         let mut subcmd_dets = String::new();
-        let mut scs = completions::get_all_subcommand_paths(self.0, true);
+        let mut scs = shells::get_all_subcommand_paths(self.0, true);
         scs.sort();
         scs.dedup();
 

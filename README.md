@@ -13,26 +13,28 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/ejg8c33dn3
 Table of Contents
 =================
 
-* [What's New](#whats-new)
-* [About](#about)
-* [FAQ](#faq)
-* [Features](#features)
-* [Quick Example](#quick-example)
-* [Try it!](#try-it)
-  * [Pre-Built Test](#pre-built-test)
-  * [BYOB (Build Your Own Binary)](#byob-build-your-own-binary)
-* [Usage](#usage)
-  * [Optional Dependencies / Features](#optional-dependencies--features)
-  * [Dependencies Tree](#dependencies-tree)
-  * [More Information](#more-information)
-    * [Video Tutorials](#video-tutorials)
-* [How to Contribute](#how-to-contribute)
-  * [Compatibility Policy](#compatibility-policy)
-    * [Minimum Version of Rust](#minimum-version-of-rust)
-* [Related Crates](#related-crates)
-* [License](#license)
-* [Recent Breaking Changes](#recent-breaking-changes)
-  * [Deprecations](#deprecations)
+- [clap_generate](#clapgenerate)
+- [Table of Contents](#table-of-contents)
+  - [What's New](#whats-new)
+  - [About](#about)
+  - [FAQ](#faq)
+  - [Features](#features)
+  - [Quick Example](#quick-example)
+  - [Usage](#usage)
+    - [Optional Dependencies / Features](#optional-dependencies--features)
+      - [Features enabled by default](#features-enabled-by-default)
+      - [Opt-in features](#opt-in-features)
+    - [Dependencies Tree](#dependencies-tree)
+    - [More Information](#more-information)
+  - [How to Contribute](#how-to-contribute)
+    - [Compatibility Policy](#compatibility-policy)
+      - [Warning about '~' Dependencies](#warning-about--dependencies)
+      - [Minimum Version of Rust](#minimum-version-of-rust)
+      - [Breaking Changes](#breaking-changes)
+  - [License](#license)
+  - [Related Crates](#related-crates)
+  - [Recent Breaking Changes](#recent-breaking-changes)
+    - [Deprecations](#deprecations)
 
 Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
@@ -121,7 +123,9 @@ Upon bumping the minimum version of Rust (assuming it's within the stable-2 rang
 
 ## License
 
-`clap_generate` is licensed under either the MIT or APACHE 2.0 license at your option. Unless otherwise explicitly stated, all contributions are dual licensed likewise. Please read the [LICENSE-MIT](LICENSE-MIT) or [LICENSE-APACHE](LICENSE-APACHE) files in this repository for more information.
+`clap_generate` is distributed under the terms of both the MIT license and the Apache License (Version 2.0).
+
+See the [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT) files in this repository for more information.
 
 ## Related Crates
 
