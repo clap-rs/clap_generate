@@ -8,6 +8,7 @@ fn main() {
     let app = App::new("testapp")
         .about("Pointless application")
         .author("Alice Person <alice@person.com>\nBob Human <bob@human.com>")
+        .arg(Arg::with_name("dir").index(1))
         .arg(
             Arg::with_name("debug")
                 .short('d')

@@ -21,7 +21,10 @@ pub fn gen_manuals(app: &clap::App) -> Vec<man::Manual> {
     }
 
     for arg in &app.args {
-        if arg.is_set(clap::ArgSettings::TakesValue) {
+        if let Some(_index) = arg.index {
+            let mut positional_arg = man::Arg::new(arg.name);
+            manual = manual.arg(positional_arg);
+        } else if arg.is_set(clap::ArgSettings::TakesValue) {
             let mut opt = man::Opt::new(arg.name);
             if let Some(help) = get_help(arg) {
                 opt = opt.help(&help);
