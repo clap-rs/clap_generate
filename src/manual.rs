@@ -12,49 +12,51 @@ pub fn gen_manuals(app: &clap::App) -> Vec<man::Manual> {
         manual = manual.about(about.to_string());
     }
 
+    // Assume multiple authors are passed separated by newline. Worst case the
+    // formatting comes out slightly different.
+    for authors in &app.author {
+        for author in authors.split("\n") {
+            manual = manual.author(man::Author::new(author));
+        }
+    }
+
+    for arg in &app.args {
+        if arg.is_set(clap::ArgSettings::TakesValue) {
+            let mut opt = man::Opt::new(arg.name);
+            if let Some(help) = get_help(arg) {
+                opt = opt.help(&help);
+            }
+            if let Some(short) = arg.short {
+                opt = opt.short(&format!("-{}", short.to_string()));
+            }
+            if let Some(long) = arg.long {
+                opt = opt.long(&format!("--{}", long));
+            }
+            manual = manual.option(opt);
+        } else {
+            let mut flag = man::Flag::new();
+            if let Some(help) = get_help(arg) {
+                flag = flag.help(&help);
+            }
+            if let Some(short) = arg.short {
+                flag = flag.short(&format!("-{}", short.to_string()));
+            }
+            if let Some(long) = arg.long {
+                flag = flag.long(&format!("--{}", long));
+            }
+            manual = manual.flag(flag);
+        }
+    }
+
     vec![manual]
-
-    // manual.description = app.about.map(Into::into);
-    // manual.authors = app.author.map(Into::into);
 }
 
-fn convert_arg(arg: &clap::Arg) -> man::Arg {
-    unimplemented!();
+fn get_help(arg: &clap::Arg) -> Option<String> {
+    if let Some(help) = arg.long_help {
+        Some(help.into())
+    } else if let Some(help) = arg.help {
+        Some(help.into())
+    } else {
+        None
+    }
 }
-
-// impl Manual {
-//     pub fn new<'a, 'b>(app: &App<'a, 'b>) -> Manual {
-//         let mut man = Manual::new();
-//         Manual::recursive(&mut man, app);
-//         man
-//     }
-
-//     // TODO: Make this less awful
-//     fn add_empty_child(&mut self, name: &str) -> &mut Manual {
-//         self.children.push((name.into(), Manual::new()));
-//         let (_, ref mut manual) = self.children.last_mut().unwrap();
-//         manual
-//     }
-// }
-
-// fn recurse(manual: &mut Manual, app: &App) {
-//     manual.name = app.name.clone().into();
-//     manual.description = app.about.map(Into::into);
-//     manual.authors = app.author.map(Into::into);
-//     manual.flags = vec![];
-//     manual.options = vec![];
-
-//     for arg in &app.args {
-//         if arg.is_set(ArgSettings::TakesValue) {
-//             manual.flags.push(arg.into());
-//         } else {
-//             manual.options.push(arg.into());
-//         }
-//     }
-
-//     for app in &app.subcommands {
-//         let _inner_name: String = app.name.clone();
-//         let mut inner = manual.add_empty_child(&app.name);
-//         recurse(&mut inner, app);
-//     }
-// }
