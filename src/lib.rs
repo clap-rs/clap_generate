@@ -29,6 +29,7 @@
 #![cfg_attr(feature = "lints", allow(explicit_iter_loop))]
 
 extern crate clap as _clap;
+extern crate man;
 
 // Re-Export of clap
 mod clap {
@@ -40,6 +41,7 @@ const INTERNAL_ERROR_MSG: &'static str = "Fatal internal error. Please consider 
 
 #[macro_use]
 mod macros;
+mod manual;
 mod shells;
 
 use shells::{ComplGen, Shell};
@@ -48,6 +50,8 @@ use std::ffi::OsString;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
+
+pub use manual::gen_manuals;
 
 /// Generate a completions file for a specified shell at compile time.
 ///

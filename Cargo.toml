@@ -37,6 +37,9 @@ description = """
 A shell completion script and manpage generation library used with clap
 """
 
+[package.metadata.docs.rs]
+features = ["doc"]
+
 [badges]
 travis-ci = { repository = "clap-rs/clap_generate" }
 appveyor = { repository = "clap-rs/clap_generate" }
@@ -48,6 +51,7 @@ maintenance = {status = "actively-developed"}
 [dependencies]
 clap = {git = "https://github.com/kbknapp/clap-rs", branch = "v3-master", default-features = false}
 clippy    = { version = "~0.0.166", optional = true }
+man = {git = "https://github.com/rust-clique/man", branch = "declap"}
 
 [dev-dependencies]
 version-sync = "0.5"
@@ -94,6 +98,3 @@ rpath = false
 lto = true
 debug-assertions = false
 codegen-units = 1
-
-[package.metadata.docs.rs]
-features = ["doc"]
