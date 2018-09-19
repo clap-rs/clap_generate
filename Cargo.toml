@@ -51,7 +51,7 @@ maintenance = {status = "actively-developed"}
 [dependencies]
 clap = {git = "https://github.com/kbknapp/clap-rs", branch = "v3-master", default-features = false}
 clippy    = { version = "~0.0.166", optional = true }
-man = {git = "https://github.com/rust-clique/man", branch = "declap"}
+man = {git = "https://github.com/rust-clique/man" }
 
 [dev-dependencies]
 version-sync = "0.5"
