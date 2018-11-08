@@ -42,7 +42,8 @@ const INTERNAL_ERROR_MSG: &'static str = "Fatal internal error. Please consider 
 mod macros;
 mod shells;
 
-use shells::{ComplGen, Shell};
+use shells::ComplGen;
+pub use shells::Shell;
 
 use std::ffi::OsString;
 use std::fs::File;
