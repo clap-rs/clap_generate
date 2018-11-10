@@ -63,7 +63,7 @@ use std::path::PathBuf;
 /// First, it helps if we separate out our `App` definition into a separate file. Whether you
 /// do this as a function, or bare App definition is a matter of personal preference.
 ///
-/// ```ignore
+/// ```norun
 /// // src/cli.rs
 ///
 /// use clap::{App, Arg, SubCommand};
