@@ -1,7 +1,9 @@
+extern crate clap_generate;
 extern crate clap;
 extern crate regex;
 
-use clap::{App, Arg, Shell, SubCommand};
+use clap_generate::*;
+use clap::{App, Arg};
 use regex::Regex;
 
 static BASH: &'static str = r#"_myapp() {
@@ -721,7 +723,7 @@ fn build_app_with_name(s: &'static str) -> App<'static, 'static> {
     App::new(s)
         .about("Tests completions")
         .arg(Arg::with_name("file").help("some input file"))
-        .subcommand(SubCommand::with_name("test")
+        .subcommand(App::new("test")
             .about("tests things")
             .arg(Arg::with_name("case")
                 .long("case")
@@ -731,13 +733,13 @@ fn build_app_with_name(s: &'static str) -> App<'static, 'static> {
 
 fn build_app_special_commands() -> App<'static, 'static> {
     build_app_with_name("my_app")
-        .subcommand(SubCommand::with_name("some_cmd")
+        .subcommand(App::new("some_cmd")
                     .about("tests other things")
                     .arg(Arg::with_name("config")
                          .long("--config")
                          .takes_value(true)
                          .help("the other case to test")))
-        .subcommand(SubCommand::with_name("some-cmd-with-hypens"))
+        .subcommand(App::new("some-cmd-with-hypens"))
 }
 
 fn build_app_special_help() -> App<'static, 'static> {
@@ -766,7 +768,7 @@ fn build_app_special_help() -> App<'static, 'static> {
 fn bash() {
     let mut app = build_app();
     let mut buf = vec![];
-    app.gen_completions_to("myapp", Shell::Bash, &mut buf);
+    generate_completions_to(&mut app, "myapp", Shell::Bash, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, BASH));
@@ -776,7 +778,7 @@ fn bash() {
 fn zsh() {
     let mut app = build_app();
     let mut buf = vec![];
-    app.gen_completions_to("myapp", Shell::Zsh, &mut buf);
+    generate_completions_to(&mut app, "myapp", Shell::Zsh, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, ZSH));
@@ -786,7 +788,7 @@ fn zsh() {
 fn fish() {
     let mut app = build_app();
     let mut buf = vec![];
-    app.gen_completions_to("myapp", Shell::Fish, &mut buf);
+    generate_completions_to(&mut app, "myapp", Shell::Fish, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, FISH));
@@ -796,7 +798,7 @@ fn fish() {
 fn powershell() {
     let mut app = build_app();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::PowerShell, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::PowerShell, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, POWERSHELL));
@@ -806,7 +808,7 @@ fn powershell() {
 fn elvish() {
     let mut app = build_app();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Elvish, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Elvish, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, ELVISH));
@@ -816,7 +818,7 @@ fn elvish() {
 fn elvish_with_special_commands() {
     let mut app = build_app_special_commands();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Elvish, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Elvish, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, ELVISH_SPECIAL_CMDS));
@@ -826,7 +828,7 @@ fn elvish_with_special_commands() {
 fn powershell_with_special_commands() {
     let mut app = build_app_special_commands();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::PowerShell, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::PowerShell, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, POWERSHELL_SPECIAL_CMDS));
@@ -836,7 +838,7 @@ fn powershell_with_special_commands() {
 fn bash_with_special_commands() {
     let mut app = build_app_special_commands();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Bash, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Bash, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, BASH_SPECIAL_CMDS));
@@ -846,7 +848,7 @@ fn bash_with_special_commands() {
 fn fish_with_special_commands() {
     let mut app = build_app_special_commands();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Fish, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Fish, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, FISH_SPECIAL_CMDS));
@@ -856,7 +858,7 @@ fn fish_with_special_commands() {
 fn zsh_with_special_commands() {
     let mut app = build_app_special_commands();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Zsh, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Zsh, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, ZSH_SPECIAL_CMDS));
@@ -866,7 +868,7 @@ fn zsh_with_special_commands() {
 fn fish_with_special_help() {
     let mut app = build_app_special_help();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Fish, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Fish, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, FISH_SPECIAL_HELP));
@@ -876,7 +878,7 @@ fn fish_with_special_help() {
 fn zsh_with_special_help() {
     let mut app = build_app_special_help();
     let mut buf = vec![];
-    app.gen_completions_to("my_app", Shell::Zsh, &mut buf);
+    generate_completions_to(&mut app, "my_app", Shell::Zsh, &mut buf);
     let string = String::from_utf8(buf).unwrap();
 
     assert!(compare(&*string, ZSH_SPECIAL_HELP));
